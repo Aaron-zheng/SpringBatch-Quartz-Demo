@@ -24,7 +24,7 @@
         -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:spring/spring-quartz.xml</param-value>
+            <param-value>classpath:spring/batch-quartz-context.xml</param-value>
         </init-param>
     </servlet>
 
