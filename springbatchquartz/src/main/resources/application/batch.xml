@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:batch="http://www.springframework.org/schema/batch"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/batch
+	http://www.springframework.org/schema/batch/spring-batch-3.0.xsd
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	">
+
+
+	<!-- 配置 Job -->
+	<batch:job id="creditInvestigationJob">
+		<!-- 可以按照步骤来配置，step 可以有继承，抽象关系，可以使用 parent 和 abstract 参数 -->
+		<!-- 目前只定义了简单的一步 -->
+		<batch:step id="step1">
+			<batch:tasklet>
+				<!-- commit-interval 代表每读取多少次然后提交一次 -->
+				<!-- chunk-completion-policy 代表步骤结束的条件  -->
+				<batch:chunk
+						reader="creditInvestigationReaderTask"
+						processor="creditInvestigationProcessorTask"
+						writer="creditInvestigationWritterTask"
+						commit-interval="5" retry-limit="3"
+						chunk-completion-policy="">
+					<batch:retryable-exception-classes>
+						<batch:include class="org.springframework.dao.DeadlockLoserDataAccessException"/>
+					</batch:retryable-exception-classes>
+				</batch:chunk>
+			</batch:tasklet>
+		</batch:step>
+	</batch:job>
+
+	<!-- 配置数据处理入口  -->
+	<bean id="creditInvestigationReaderTask" class="com.sightcorner.batch.ReaderTask1"></bean>
+	<!-- 配置数据处理过程  -->
+	<bean id="creditInvestigationProcessorTask" class="com.sightcorner.batch.ProcessorTask"></bean>
+	<!-- 配饰数据处理输出  -->
+	<bean id="creditInvestigationWritterTask" class="com.sightcorner.batch.WriterTask"></bean>
+
+
+	<!-- 用的是简单的 SimpleJobLauncher -->
+	<bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+
+	<!-- 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager"/>
+
+	<!-- 目前使用不需要数据库的 jobRepository，如果有需要，也可以配置需要绑定数据库的批量处理  -->
+	<bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+
+	<!-- 使用 MapJobRegistry -->
+	<bean id="jobRegistry" class="org.springframework.batch.core.configuration.support.MapJobRegistry" />
+
+	<bean class="org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor">
+		<property name="jobRegistry" ref="jobRegistry" />
+	</bean>
+
+
+</beans>
