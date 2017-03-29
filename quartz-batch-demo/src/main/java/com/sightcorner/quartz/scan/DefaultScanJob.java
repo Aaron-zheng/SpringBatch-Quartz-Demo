@@ -1,6 +1,4 @@
-package com.sightcorner.quartz.impl;
-
-import java.util.List;
+package com.sightcorner.quartz.scan;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

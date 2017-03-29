@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 
 
-@Service
+@Service("scheduleTaskService")
 public class ScheduleTaskService implements IScheduleTaskService {
 	
 	private final String STATUS_STOP = "0";

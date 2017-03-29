@@ -8,7 +8,28 @@
     <name>batch</name>
     <dependencies>
 
-        <!--added by me-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <!--实现slf4j接口并且整合-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>3.2.4.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -34,12 +55,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>3.2.4.RELEASE</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.batch</groupId>
             <artifactId>spring-batch-core</artifactId>
             <version>3.0.7.RELEASE</version>
@@ -58,11 +73,8 @@
             <scope>provided</scope>
         </dependency>
 
-
     </dependencies>
     <build>
-        <finalName>springbatchquartz</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
